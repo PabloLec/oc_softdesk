@@ -1,5 +1,6 @@
 from django.urls import include, path
 from rest_framework_nested import routers
+from rest_framework_jwt.views import obtain_jwt_token
 from . import views
 
 projects_router = routers.SimpleRouter()
@@ -19,5 +20,5 @@ urlpatterns = [
     path("", include(users_router.urls)),
     path("", include(issues_router.urls)),
     path("", include(comments_router.urls)),
-    path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    path("login", obtain_jwt_token),
 ]

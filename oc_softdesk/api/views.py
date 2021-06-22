@@ -3,12 +3,14 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from .serializers import *
 from .models import *
+from .permissions import *
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     http_method_names = ["get", "post", "put", "delete"]
+    permission_classes = (IsProjectManager,)
 
 
 class ContributorViewSet(viewsets.ModelViewSet):
