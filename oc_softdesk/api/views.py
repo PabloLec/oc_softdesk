@@ -16,6 +16,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
 class ContributorViewSet(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
     http_method_names = ["get", "post", "delete"]
+    permission_classes = (IsProjectManager,)
+
+    def create(self, request, *args, **kwargs):
+        request.data._mutable = True
+        request.data["project"] = kwargs["projects_pk"]
+        request.data._mutable = False
+        return super(ContributorViewSet, self).create(request, *args, **kwargs)
 
     def retrieve(self, request, projects_pk=None, pk=None):
         response = {"message": "HTTP_405_METHOD_NOT_ALLOWED"}
