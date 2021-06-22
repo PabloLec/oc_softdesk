@@ -36,6 +36,14 @@ class IssueViewSet(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
     http_method_names = ["get", "post", "put", "delete"]
 
+    def create(self, request, *args, **kwargs):
+        request.data._mutable = True
+        request.data["project"] = kwargs["projects_pk"]
+        request.data["author"] = request.user.pk
+        request.data["assignee"] = request.user.pk
+        request.data._mutable = False
+        return super(IssueViewSet, self).create(request, *args, **kwargs)
+
     def retrieve(self, request, projects_pk=None, pk=None):
         response = {"message": "HTTP_405_METHOD_NOT_ALLOWED"}
         return Response(response, status=status.HTTP_405_METHOD_NOT_ALLOWED)

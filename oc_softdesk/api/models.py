@@ -71,9 +71,7 @@ class Issue(models.Model):
     description = models.CharField(max_length=550)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
     author = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name="author")
-    assignee = models.ForeignKey(
-        to=User, null=True, on_delete=models.SET_NULL, related_name="assignee", default=author
-    )
+    assignee = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL, related_name="assignee")
     created_time = models.DateTimeField(auto_now_add=True)
 
 

@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import permissions
 
 from .models import *
@@ -19,7 +20,12 @@ class IsProjectManager(permissions.BasePermission):
                 project = view.kwargs["projects_pk"]
             else:
                 project = view.kwargs["pk"]
-            contributor = Contributor.objects.get(user=request.user, project=project)
+
+            try:
+                contributor = Contributor.objects.get(user=request.user, project=project)
+            except ObjectDoesNotExist:
+                return False
+
             if not contributor.is_manager:
                 return False
         return True

@@ -23,7 +23,7 @@ class ContributorSerializer(serializers.ModelSerializer):
 class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Issue
-        fields = ("title", "description", "project", "author", "assignee", "tag", "priority", "status")
+        fields = ("id", "title", "description", "project", "author", "assignee", "tag", "priority", "status")
 
 
 class CommentSerializer(serializers.ModelSerializer):
