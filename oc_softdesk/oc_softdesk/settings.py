@@ -127,6 +127,7 @@ AUTH_USER_MODEL = "api.User"
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
     "DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_jwt.authentication.JSONWebTokenAuthentication",),
+    "DEFAULT_THROTTLE_RATES": {"anon": "500/day", "user": "1/second"},
 }
 
 JWT_AUTH = {
