@@ -2,7 +2,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import permissions
 
 from .models import *
-from .serializers import *
 
 
 class IsProjectManager(permissions.BasePermission):

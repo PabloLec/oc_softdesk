@@ -20,5 +20,6 @@ urlpatterns = [
     path("", include(users_router.urls)),
     path("", include(issues_router.urls)),
     path("", include(comments_router.urls)),
+    path("signup", views.RegisterApi.as_view()),
     path("login", obtain_jwt_token),
 ]
