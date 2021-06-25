@@ -11,7 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     class Meta:
         model = Project
-        fields = ("title", "description", "project_type")
+        fields = ("id", "title", "description", "project_type")
 
 
 class ContributorSerializer(serializers.ModelSerializer):
@@ -29,4 +29,4 @@ class IssueSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ("description", "author", "issue")
+        fields = ("id", "description", "author", "issue")
