@@ -26,13 +26,31 @@ class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = (IsProjectManagerFromProjectView,)
+    permission_classes = (
+        IsProjectAuthorFromProjectView,
+        IsContributorFromProjectView,
+    )
+
+    def create(self, request, *args, **kwargs):
+        request.POST._mutable = True
+        request.data["author"] = request.user.pk
+        request.POST._mutable = False
+        return super(ProjectViewSet, self).create(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        request.POST._mutable = True
+        request.data["author"] = request.user.pk
+        request.POST._mutable = False
+        return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
 
 class ContributorViewSet(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
     http_method_names = ["get", "post", "delete"]
-    permission_classes = (IsProjectManagerFromContributorView,)
+    permission_classes = (
+        IsProjectAuthorFromContributorView,
+        IsContributor,
+    )
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
@@ -60,7 +78,10 @@ class ContributorViewSet(viewsets.ModelViewSet):
 class IssueViewSet(viewsets.ModelViewSet):
     serializer_class = IssueSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = (IsIssueAuthor,)
+    permission_classes = (
+        IsIssueAuthor,
+        IsContributorFromIssueAndCommentView,
+    )
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True
@@ -93,7 +114,10 @@ class IssueViewSet(viewsets.ModelViewSet):
 class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     http_method_names = ["get", "post", "put", "delete"]
-    permission_classes = (IsCommentAuthor,)
+    permission_classes = (
+        IsCommentAuthor,
+        IsContributorFromIssueAndCommentView,
+    )
 
     def create(self, request, *args, **kwargs):
         request.POST._mutable = True

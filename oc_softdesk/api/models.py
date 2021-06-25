@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 
 class User(AbstractUser):
@@ -21,6 +23,7 @@ class Project(models.Model):
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=550)
     project_type = models.CharField(max_length=8, choices=TYPE_CHOICES)
+    author = models.ForeignKey(to=User, on_delete=models.CASCADE)
 
 
 class Contributor(models.Model):
@@ -32,7 +35,6 @@ class Contributor(models.Model):
 
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     project = models.ForeignKey(to=Project, on_delete=models.CASCADE)
-    is_manager = models.BooleanField(default=False)
 
 
 class Issue(models.Model):
@@ -80,3 +82,9 @@ class Comment(models.Model):
     author = models.ForeignKey(to=User, null=True, on_delete=models.SET_NULL)
     issue = models.ForeignKey(to=Issue, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
+
+
+@receiver(post_save, sender=Project)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Contributor.objects.create(user=instance.author, project=instance)
