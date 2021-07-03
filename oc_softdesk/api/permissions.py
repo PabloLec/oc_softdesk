@@ -11,16 +11,12 @@ class IsAuthor(permissions.BasePermission):
         except ObjectDoesNotExist:
             return True
 
-        print(content.author, user)
-        if content.author != user:
-            return False
-
-        return True
+        return content.author == user
 
 
 class IsProjectAuthorFromProjectView(IsAuthor):
     def has_permission(self, request, view):
-        if not view.action in ("update", "destroy"):
+        if view.action not in ("update", "destroy"):
             return True
 
         return self.is_author(content_type=Project, pk=view.kwargs["pk"], user=request.user)
@@ -28,7 +24,7 @@ class IsProjectAuthorFromProjectView(IsAuthor):
 
 class IsProjectAuthorFromContributorView(IsAuthor):
     def has_permission(self, request, view):
-        if not view.action in ("create", "destroy"):
+        if view.action not in ("create", "destroy"):
             return True
 
         return self.is_author(content_type=Project, pk=view.kwargs["projects_pk"], user=request.user)
@@ -36,14 +32,14 @@ class IsProjectAuthorFromContributorView(IsAuthor):
 
 class IsIssueAuthor(IsAuthor):
     def has_permission(self, request, view):
-        if not view.action in ("update", "destroy"):
+        if view.action not in ("update", "destroy"):
             return True
         return self.is_author(content_type=Issue, pk=view.kwargs["pk"], user=request.user)
 
 
 class IsCommentAuthor(IsAuthor):
     def has_permission(self, request, view):
-        if not view.action in ("update", "destroy"):
+        if view.action not in ("update", "destroy"):
             return True
         return self.is_author(content_type=Comment, pk=view.kwargs["pk"], user=request.user)
 
