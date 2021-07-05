@@ -43,6 +43,9 @@ class ProjectViewSet(viewsets.ModelViewSet):
         request.POST._mutable = False
         return super(ProjectViewSet, self).update(request, *args, **kwargs)
 
+    def get_queryset(self):
+        return Project.objects.filter(contributor__user=self.request.user)
+
 
 class ContributorViewSet(viewsets.ModelViewSet):
     serializer_class = ContributorSerializer
